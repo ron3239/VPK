@@ -43,6 +43,111 @@ body {
   box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
 }
 
+/* Правила и списки */
+.rules {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-radius: 16px;
+  max-width: 600px;
+  margin: 0 auto 3rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.rules h2 {
+  color: #ff8e53;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.rules ul {
+  list-style: none;
+  text-align: left;
+}
+
+.rules li {
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+  position: relative;
+  font-size: 1.1rem;
+}
+
+.rules li:before {
+  content: '•';
+  color: #ff6b35;
+  position: absolute;
+  left: 0;
+  font-size: 1.5rem;
+}
+
+/* Блоки с информацией */
+.points-info, .status-info {
+  margin-top: 2rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.points-info h3, .status-info h3 {
+  color: #ff8e53;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.points-examples, .status-examples {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.points-example, .status-example {
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: bold;
+  min-width: 120px;
+  font-size: 1rem;
+  line-height: 1.4;
+  transition: transform 0.2s ease;
+}
+
+.points-example:hover, .status-example:hover {
+  transform: translateY(-2px);
+}
+
+.points-example.easy {
+  background: rgba(76, 175, 80, 0.3);
+  border: 2px solid #4CAF50;
+}
+
+.points-example.medium {
+  background: rgba(255, 152, 0, 0.3);
+  border: 2px solid #FF9800;
+}
+
+.points-example.hard {
+  background: rgba(244, 67, 54, 0.3);
+  border: 2px solid #f44336;
+}
+
+.status-example.available {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid #ff8e53;
+}
+
+.status-example.completed {
+  background: rgba(76, 175, 80, 0.2);
+  border: 2px solid #4CAF50;
+}
+
+.status-example.failed {
+  background: rgba(244, 67, 54, 0.2);
+  border: 2px solid #f44336;
+}
+
 /* Игровая страница */
 .game-page {
   min-height: 100vh;
@@ -109,17 +214,25 @@ body {
   font-weight: bold;
 }
 
-.task-cell:hover:not(.completed) {
+.task-cell.available:hover {
   background: rgba(255, 255, 255, 0.15);
   border-color: #ff8e53;
   transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 142, 83, 0.3);
 }
 
 .task-cell.completed {
-  opacity: 0.4;
+  opacity: 0.6;
   cursor: not-allowed;
   background: rgba(76, 175, 80, 0.1);
   border-color: #4CAF50;
+}
+
+.task-cell.failed {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: rgba(244, 67, 54, 0.1);
+  border-color: #f44336;
 }
 
 .task-points {
@@ -127,11 +240,19 @@ body {
   font-weight: bold;
 }
 
-.completed-badge {
+.status-badge {
   position: absolute;
   top: 0.3rem;
   right: 0.3rem;
   font-size: 1.2rem;
+}
+
+.status-badge.completed {
+  color: #4CAF50;
+}
+
+.status-badge.failed {
+  color: #f44336;
 }
 
 /* Цвета для сложности */
@@ -236,7 +357,7 @@ body {
   gap: 1rem;
 }
 
-.complete-btn, .skip-btn, .control-btn, .new-game-btn {
+.complete-btn, .fail-btn, .skip-btn, .control-btn, .new-game-btn {
   padding: 1rem 1.5rem;
   border: none;
   border-radius: 8px;
@@ -251,6 +372,11 @@ body {
   color: white;
 }
 
+.fail-btn {
+  background: linear-gradient(45deg, #f44336, #d32f2f);
+  color: white;
+}
+
 .skip-btn {
   background: linear-gradient(45deg, #666, #888);
   color: white;
@@ -261,7 +387,7 @@ body {
   color: white;
 }
 
-.complete-btn:hover, .skip-btn:hover, .control-btn:hover, .new-game-btn:hover {
+.complete-btn:hover, .fail-btn:hover, .skip-btn:hover, .control-btn:hover, .new-game-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
@@ -293,6 +419,17 @@ body {
 .score-value {
   font-size: 1.8rem;
   font-weight: bold;
+}
+
+.score-value.completed {
+  color: #4CAF50;
+}
+
+.score-value.failed {
+  color: #f44336;
+}
+
+.score-value.available {
   color: #ff8e53;
 }
 
@@ -348,78 +485,17 @@ body {
     margin: 1rem;
     padding: 1.5rem;
   }
-}
-
-/* Добавляем стили для невыполненных заданий */
-.task-cell.failed {
-  opacity: 0.4;
-  cursor: not-allowed;
-  background: rgba(244, 67, 54, 0.1);
-  border-color: #f44336;
-}
-
-.task-cell.failed .task-points {
-  color: #f44336;
-  text-decoration: line-through;
-}
-
-.status-badge {
-  position: absolute;
-  top: 0.3rem;
-  right: 0.3rem;
-  font-size: 1.2rem;
-}
-
-.status-badge.completed {
-  color: #4CAF50;
-}
-
-.status-badge.failed {
-  color: #f44336;
-}
-
-/* Стили для кнопки "не выполнено" */
-.fail-btn {
-  padding: 1rem 1.5rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-weight: bold;
-  background: linear-gradient(45deg, #f44336, #d32f2f);
-  color: white;
-}
-
-.fail-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
-}
-
-/* Обновляем цвета в таблице счета */
-.score-value.completed {
-  color: #4CAF50;
-}
-
-.score-value.failed {
-  color: #f44336;
-}
-
-.score-value.available {
-  color: #ff8e53;
-}
-
-/* Анимации для ячеек */
-.task-cell {
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.task-cell.available:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 4px 12px rgba(255, 142, 83, 0.3);
-}
-
-.task-cell.completed, .task-cell.failed {
-  cursor: not-allowed;
+  
+  .points-examples, .status-examples {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .points-example, .status-example {
+    width: 200px;
+  }
+  
+  .rules li {
+    font-size: 1rem;
+  }
 }
