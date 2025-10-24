@@ -26,9 +26,9 @@ export const tasks: TaskCategory[] = [
     category: "Тактическая подготовка",
     tasks: [
       { id: 9, name: "Перевязывание раны", points: 20, category: "Тактическая подготовка" , status: 'available' },
-      { id: 10, name: "Чтение карты (определить объект)", points: 30, category: "Тактическая подготовка" , status: 'available' },
+      { id: 10, name: "Обойти 'ловушки' (паутина)", points: 30, category: "Тактическая подготовка" , status: 'available' },
       { id: 11, name: "Перенос раненого (2 чел.)", points: 40, category: "Тактическая подготовка", status: 'available' },
-      { id: 12, name: 'Обойти "ловушки" (паутина)', points: 50, category: "Тактическая подготовка" , status: 'available' },
+      { id: 12, name: 'Чтение карты (определить объект)', points: 50, category: "Тактическая подготовка" , status: 'available' },
       { id: 13, name: "Расшифровать донесение и нанести объект на карту", points: 60, category: "Тактическая подготовка" , status: 'available' }
     ]
   },
@@ -50,7 +50,7 @@ export const tasks: TaskCategory[] = [
       { id: 19, name: "Назвать 3 рода войск", points: 20, category: "Специальные задания" , status: 'available' },
       { id: 20, name: "Синхронные приседания (3 чел.)", points: 30, category: "Специальные задания" , status: 'available' },
       { id: 21, name: 'Метание "гранаты" в цель', points: 40, category: "Специальные задания" , status: 'available' },
-      { id: 22, name: "Спеть военную песню (1 куплет)", points: 50, category: "Специальные задания" , status: 'available' },
+      { id: 22, name: "Спаринг", points: 50, category: "Специальные задания" , status: 'available' },
       { id: 23, name: "Игра", points: 60, category: "Специальные задания" , status: 'available' }
     ]
   }
