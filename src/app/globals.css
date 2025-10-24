@@ -1,26 +1,425 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #1a2a6c, #2a5298, #1e3c72);
+  color: white;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Главное меню */
+.main-menu {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.start-button {
+  display: inline-block;
+  padding: 1.2rem 2.5rem;
+  background: linear-gradient(45deg, #ff6b35, #ff8e53);
+  color: white;
+  text-decoration: none;
+  border-radius: 12px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 3rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+}
+
+.start-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+}
+
+/* Игровая страница */
+.game-page {
+  min-height: 100vh;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.game-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.game-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(45deg, #ff6b35, #ff8e53);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Таблица заданий */
+.task-table {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.category-section {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.category-title {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: #ff8e53;
+  text-align: center;
+}
+
+.tasks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  justify-items: center;
+}
+
+.task-cell {
+  width: 100px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 3px solid transparent;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  backdrop-filter: blur(10px);
+  font-weight: bold;
+}
+
+.task-cell:hover:not(.completed) {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #ff8e53;
+  transform: translateY(-2px) scale(1.05);
+}
+
+.task-cell.completed {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(76, 175, 80, 0.1);
+  border-color: #4CAF50;
+}
+
+.task-points {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.completed-badge {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  font-size: 1.2rem;
+}
+
+/* Цвета для сложности */
+.points-easy {
+  background: rgba(76, 175, 80, 0.2);
+  border-color: #4CAF50;
+}
+
+.points-medium {
+  background: rgba(255, 152, 0, 0.2);
+  border-color: #FF9800;
+}
+
+.points-hard {
+  background: rgba(244, 67, 54, 0.2);
+  border-color: #f44336;
+}
+
+.points-easy .task-points { color: #4CAF50; }
+.points-medium .task-points { color: #FF9800; }
+.points-hard .task-points { color: #f44336; }
+
+/* Модальное окно */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: white;
+  color: #333;
+  border-radius: 20px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #eee;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  color: #666;
+  padding: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn:hover {
+  color: #333;
+}
+
+.task-info {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.task-category {
+  display: inline-block;
+  background: #ff6b35;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.task-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  line-height: 1.4;
+  color: #1a2a6c;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.complete-btn, .skip-btn, .control-btn, .new-game-btn {
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+}
+
+.complete-btn {
+  background: linear-gradient(45deg, #4CAF50, #45a049);
+  color: white;
+}
+
+.skip-btn {
+  background: linear-gradient(45deg, #666, #888);
+  color: white;
+}
+
+.control-btn, .new-game-btn {
+  background: linear-gradient(45deg, #2196F3, #1976D2);
+  color: white;
+}
+
+.complete-btn:hover, .skip-btn:hover, .control-btn:hover, .new-game-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Таблица счета */
+.score-board {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.score-item {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem;
+  border-radius: 12px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.score-label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.8;
+}
+
+.score-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #ff8e53;
+}
+
+/* Завершение игры */
+.game-completed {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 3rem;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  margin: 2rem 0;
+}
+
+.final-stats {
+  font-size: 1.3rem;
+  margin: 2rem 0;
+}
+
+.final-stats strong {
+  color: #ff8e53;
+}
+
+.game-controls {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .tasks-grid {
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 0.8rem;
+  }
+  
+  .task-cell {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .task-points {
+    font-size: 1.5rem;
+  }
+  
+  .score-board {
+    grid-template-columns: 1fr;
+  }
+  
+  .modal-content {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}
+
+/* Добавляем стили для невыполненных заданий */
+.task-cell.failed {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: rgba(244, 67, 54, 0.1);
+  border-color: #f44336;
+}
+
+.task-cell.failed .task-points {
+  color: #f44336;
+  text-decoration: line-through;
+}
+
+.status-badge {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  font-size: 1.2rem;
+}
+
+.status-badge.completed {
+  color: #4CAF50;
+}
+
+.status-badge.failed {
+  color: #f44336;
+}
+
+/* Стили для кнопки "не выполнено" */
+.fail-btn {
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  background: linear-gradient(45deg, #f44336, #d32f2f);
+  color: white;
+}
+
+.fail-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
+}
+
+/* Обновляем цвета в таблице счета */
+.score-value.completed {
+  color: #4CAF50;
+}
+
+.score-value.failed {
+  color: #f44336;
+}
+
+.score-value.available {
+  color: #ff8e53;
+}
+
+/* Анимации для ячеек */
+.task-cell {
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.task-cell.available:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 142, 83, 0.3);
+}
+
+.task-cell.completed, .task-cell.failed {
+  cursor: not-allowed;
 }
